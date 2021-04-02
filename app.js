@@ -77,12 +77,12 @@ function createCard(img, title) {
 
 
 function loadNews() {
-  newService.topHeadlines('us', onGetResponse);
-  // let search = document.querySelector('#search');
-  // search.addEventListener('change', e => {
-  //   let query = e.target.value;
-  //   newService.everything(query, onGetResponse);
-  // });
+  // newService.topHeadlines('us', onGetResponse);
+  let search = document.querySelector('#search');
+  search.addEventListener('change', e => {
+    let query = e.target.value;
+    newService.everything(query, onGetResponse);
+  });
 
 }
 
