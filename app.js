@@ -11,7 +11,7 @@ function http() {
           }
           const response = JSON.parse(xhr.responseText);
           cb(null, response);
-          return response; // Пробный возврат значения
+          return response; // Потом избавиться от этого
         });
 
         xhr.addEventListener('error', () => {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const myHttp = http();
 
-// Самовызывающаяся функция
+
 const newService = (function () {
 
   const apiKey = '4d82c098a1dc4fa08e98d6c8ad7c4cac';
@@ -50,40 +50,69 @@ const newService = (function () {
 })();
 
 function renderNews(newsArr) {
-  let body = document.querySelector('#news-wrapper');
+  let body = document.querySelector('#body');
   let fragment = document.createDocumentFragment();
-  for (el of newsArr) {
-    let col = document.createElement('div');
-    let card = document.createElement('div');
-    let cardImage = document.createElement('div');
-    let img = document.createElement('img');
-    let span = document.createElement('span');
+  for (let i = 0; i < newsArr.length; i++) {
+    if (i % 2 !== 0) {
+      continue;
+    }
+    else {
+      // Create ROW
+      let row = document.createElement('div');
+      row.classList.add('row');
+      console.log('row', i);
+      for (let j = i; j < i + 2; j++) {
+        // Create two COL
+        console.log('col', j);
+        let col = document.createElement('div');
+        let card = document.createElement('div');
+        let cardImage = document.createElement('div');
+        let img = document.createElement('img');
+        let span = document.createElement('span');
 
-    col.classList.add('col', 's12', 'm4');
-    card.classList.add('card');
-    cardImage.classList.add('card-image');
-    img.src = el.urlToImage;
-    span.classList.add('card-title');
-    span.textContent = el.title;
-    span.style.backgroundColor = 'black';
-    span.style.opacity = '0.7';
-    span.style.fontSize = '15px';
-    span.style.width = '100%';
+        col.classList.add('col', 's6');
+        card.classList.add('card');
+        cardImage.classList.add('card-image');
+        img.src = newsArr[j].urlToImage;
+        span.classList.add('card-title');
+        span.textContent = newsArr[j].title;
+        span.style.backgroundColor = 'black';
+        span.style.opacity = '0.7';
+        span.style.fontSize = '15px';
+        span.style.width = '100%';
 
-    col.appendChild(card);
-    card.appendChild(cardImage);
-    cardImage.appendChild(img);
-    cardImage.appendChild(span);
-    fragment.appendChild(col);
-    body.appendChild(fragment);
+        row.appendChild(col);
+        col.appendChild(card);
+        card.appendChild(cardImage);
+        cardImage.appendChild(img);
+        cardImage.appendChild(span);
+        fragment.appendChild(row);
+        body.appendChild(fragment);
+      }
+    };
   }
+
+
+
+
+
+
+
 }
 
+
 function loadNews() {
-  newService.topHeadlines('ru', onGetResponse);
+  // newService.topHeadlines('ru', onGetResponse);
+  let search = document.querySelector('#search');
+  search.addEventListener('change', e => {
+    let query = e.target.value;
+    newService.everything(query, onGetResponse);
+  });
+
 }
 
 function onGetResponse(err, res) {
   renderNews(res.articles);
+  
 }
 
