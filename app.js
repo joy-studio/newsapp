@@ -41,9 +41,11 @@ const newService = (function () {
   const apiUrl = 'https://news-api-v2.herokuapp.com';
   return {
     topHeadlines(country = 'us', cb) {
+      addPreloader();
       myHttp.get(`${apiUrl}/top-headlines?country=us&apiKey=${apiKey}`, cb);
     },
     everything(query, cb) {
+      addPreloader();
       myHttp.get(`${apiUrl}/everything?q=${query}&apiKey=${apiKey}`, cb);
     }
   }
@@ -51,15 +53,17 @@ const newService = (function () {
 
 function renderNews(newsArr) {
   removePreloader();
-  let body = document.querySelector('#q');
+  let container = document.querySelector('#newsContainer');
+  if(container.children.length){
+  clearContainer(container);
+}
   let fragment = '';
 
   for (el of newsArr) {
     let ht = createCard(el.urlToImage, el.title);
     fragment += ht;
   }
-  console.log(fragment);
-  body.insertAdjacentHTML('afterbegin', fragment);
+  container.insertAdjacentHTML('afterbegin', fragment);
 }
 
 
@@ -77,18 +81,34 @@ function createCard(img, title) {
 }
 
 
+
 function loadNews() {
-  // newService.topHeadlines('us', onGetResponse);
+  
+  
+  
+  let searchBtn = document.querySelector('#search-btn');
   let search = document.querySelector('#search');
-  search.addEventListener('change', e => {
-    let query = e.target.value;
-    addPreloader();
+  let categoty = document.querySelector('#category');
+  let country = document.querySelector('#country');
+if(country.value==='' && categoty.value==='' && search.value===''){
+  newService.topHeadlines('us', onGetResponse);
+}
+country.addEventListener('change',function(e){
+  newService.topHeadlines(country.value, onGetRexsxponse);
+});
+categoty.addEventListener('change',function(){
+    newService.everything(categoty.value, onGetResponse);
+});
+  searchBtn.addEventListener('click', e => {
+    let query = search.value;
     newService.everything(query, onGetResponse);
   });
 
 }
 
 function onGetResponse(err, res) {
+  if(err){M.toast({html: err});}
+   
   renderNews(res.articles);
 }
 
@@ -104,3 +124,7 @@ function removePreloader(){
     loader.remove();
   }
 }
+function clearContainer(newsContainer){
+  newsContainer.innerHTML = '';
+}
+

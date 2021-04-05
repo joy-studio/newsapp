@@ -26,29 +26,41 @@
     <div class="container">
         <h5>Поиск новостей</h5>
         <form class="col s12">
-            <div class="input-field col s12">
-                <select>
-                    <option value="" disabled selected>Выберите страну</option>
-                    <option value="1">Россия</option>
-                    <option value="2">Украина</option>
-                    <option value="3" selected>США</option>
+            <div class="row">
+            <div class="input-field col s4">
+                <select id="country">
+                    <option value="" disabled selected>По всем странам</option>
+                    <option value="ru">Россия</option>
+                    <option value="ua">Украина</option>
+                    <option value="us">США</option>
                 </select>
                 <label>Выберите страну</label>
             </div>
 
-            <div class="row">
-                <div class="input-field col s12">
-                    <input id="search" type="text" class="validate" placeholder="Searh">
-                </div>
+            <div class="input-field col s4">
+                <select  id="category">
+                    <option value="" disabled selected>По всем категориям</option>
+                    <option value="covid">COVID</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Movie">Movie</option>
+                </select>
+                <label>Выберите Категорию</label>
             </div>
 
+            
+                <div class="input-field col s4">
+                    <input id="search" type="text" class="validate" placeholder="searh">
+                    <a class="waves-effect waves-light btn" id="search-btn"><i class="material-icons right">search</i>button</a>
+                </div>
+            
+            </div>
         </form>
     </div>
 
-    <!-- <div class="container" id="body"> TEMP-->
+    
     <div class="news-container">
         <div class="container">
-            <div class="row grid-container" id="q"></div>
+            <div class="row grid-container" id="newsContainer"></div>
         </div>
     </div>
 
