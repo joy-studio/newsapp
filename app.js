@@ -50,6 +50,7 @@ const newService = (function () {
 })();
 
 function renderNews(newsArr) {
+  removePreloader();
   let body = document.querySelector('#q');
   let fragment = '';
 
@@ -81,6 +82,7 @@ function loadNews() {
   let search = document.querySelector('#search');
   search.addEventListener('change', e => {
     let query = e.target.value;
+    addPreloader();
     newService.everything(query, onGetResponse);
   });
 
@@ -90,3 +92,15 @@ function onGetResponse(err, res) {
   renderNews(res.articles);
 }
 
+function addPreloader(){
+    document.body.insertAdjacentHTML('afterbegin',`
+  <div class="progress">
+    <div class="indeterminate"></div>
+  </div>`)
+}
+function removePreloader(){
+  let loader = document.querySelector('.progress');
+  if(loader){
+    loader.remove();
+  }
+}
